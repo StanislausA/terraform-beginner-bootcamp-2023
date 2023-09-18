@@ -8,3 +8,5 @@ unzip -u $ZIP_NAME
 sudo ./aws/install
 rm -f $ZIP_NAME
 cd $THEIA_WORKSPACE_ROOT
+
+aws sts get-caller-identity
