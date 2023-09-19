@@ -88,3 +88,6 @@ Steps for enabling Terraform Cloud:
   - alternative is to create the `tfrc.json` at terminal specified destination and with format here => [Credentials](https://developer.hashicorp.com/terraform/language/settings/terraform-cloud)
 - add to cloud block as per [Cloud Configuration](https://developer.hashicorp.com/terraform/language/settings/terraform-cloud)
 - `terraform init` then `terraform apply` (terraform commands are now ran via TFC account)
+
+Easier Terraform Cloud [credentials initialization](https://developer.hashicorp.com/terraform/cli/config/config-file#environment-variable-credentials):
+- Set environment variable: `TF_TOKEN_app_terraform_io="terraform-api-token"`
