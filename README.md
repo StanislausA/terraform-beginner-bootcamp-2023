@@ -80,3 +80,11 @@ and finally the attempt to create platform resources.
 </dt>
 <dd>Terminates defined infrastructure objects after user confirmation prompt which cannot be auto confirmed (inverse of <code>terraform apply</code>).</dd>
 </dl>
+
+Steps for enabling Terraform Cloud:
+- `terraform login`
+- in GitPod, quit(q) the terminal overlay
+- copy token into prompt for token
+  - alternative is to create the `tfrc.json` at terminal specified destination and with format here => [Credentials](https://developer.hashicorp.com/terraform/language/settings/terraform-cloud)
+- add to cloud block as per [Cloud Configuration](https://developer.hashicorp.com/terraform/language/settings/terraform-cloud)
+- `terraform init` then `terraform apply` (terraform commands are now ran via TFC account)
