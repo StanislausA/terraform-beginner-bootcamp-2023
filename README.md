@@ -75,6 +75,8 @@ which can be auto confirmed using <code>--auto-approve</code> flag
 and finally the attempt to create platform resources.
 </dd>
 
-<dt>terraform destroy</dt>
+<dt>
+<code>terraform destroy</code>
+</dt>
 <dd>Terminates defined infrastructure objects after user confirmation prompt which cannot be auto confirmed (inverse of <code>terraform apply</code>).</dd>
 </dl>
