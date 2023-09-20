@@ -16,3 +16,4 @@ jetbrains:
     plugins:
       - aws.toolkit
       - org.intellij.plugins.hcl
+      - com.jetbrains.sh
