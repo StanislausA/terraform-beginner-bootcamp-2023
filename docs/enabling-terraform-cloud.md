@@ -7,9 +7,9 @@ Enabling Terraform Cloud
 - add to cloud block as per Cloud Configuration[^2]
 - `terraform init` then `terraform apply`
 
-Easier Terraform Cloud initialization[^3]:
+Easier Terraform Cloud initialization:
 ---
-- Set environment variable: `TF_TOKEN_app_terraform_io="terraform-api-token"`
+- Set environment variable: `TF_TOKEN_app_terraform_io="terraform-api-token"`[^3]
 - `terraform apply`
 
 ---

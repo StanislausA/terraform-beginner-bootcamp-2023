@@ -76,4 +76,10 @@ and finally the attempt to create platform resources.
 <code>terraform destroy</code>
 </dt>
 <dd>Terminates defined infrastructure objects after user confirmation prompt which cannot be auto confirmed (inverse of <code>terraform apply</code>).</dd>
+<dt>
+<code>terraform.tfvars</code>
+</dt>
+<dd>Defines project scoped input variables. (affected by variable precedence[^1])</dd>
 </dl>
+
+[^1]: https://developer.hashicorp.com/terraform/cloud-docs/workspaces/variables#precedence
