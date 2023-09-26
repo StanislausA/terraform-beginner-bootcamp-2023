@@ -15,8 +15,8 @@ root/
 
 Module Creation
 ---
-Creating Modules[^1]
-General[^2]
+- Creating Modules[^1]
+- General[^2]
 
 Module definition
 ---
