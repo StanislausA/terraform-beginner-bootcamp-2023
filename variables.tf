@@ -7,3 +7,13 @@ variable "user_uuid" {
     error_message = "The user_uuid value is not a valid UUID."
   }
 }
+
+variable "bucket_name" {
+  description = "Name of bucket"
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9.-]{3,63}$", var.bucket_name))
+    error_message = "Invalid AWS S3 bucket name"
+  }
+}
