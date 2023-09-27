@@ -6,3 +6,4 @@ Table of Contents
 - [Enable Terraform Cloud](/docs/enabling-terraform-cloud.md)
 - [Terraform Modules](/docs/terraform-modules.md)
 - [Configuration Drift](/docs/fixing-resource-drift.md)
+- [Commonly Used Docs](/docs/commonly-used-documentation.md)
