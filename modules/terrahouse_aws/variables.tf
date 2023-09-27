@@ -14,6 +14,24 @@ variable "bucket_name" {
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9.-]{3,63}$", var.bucket_name))
-    error_message = "Invalid AWS S3 bucket name"
+    error_message = "Invalid AWS S3 bucket name."
+  }
+}
+
+variable "index_file" {
+  type = string
+
+  validation {
+    condition = fileexists(var.index_file)
+    error_message = "index file path does not exist."
+  }
+}
+
+variable "error_file" {
+  type = string
+
+  validation {
+    condition = fileexists(var.error_file)
+    error_message = "error file path does not exist."
   }
 }
