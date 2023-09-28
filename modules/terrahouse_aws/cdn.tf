@@ -1,6 +1,6 @@
 resource "aws_cloudfront_origin_access_control" "default" {
-  name                              = "OAC ${var.bucket_name}"
-  description                       = "Origin Access Control for Static website hosting from ${var.bucket_name}"
+  name                              = "OAC-${var.bucket_name}"
+  description                       = "Origin Access Control for Static website hosting for: ${var.bucket_name}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"

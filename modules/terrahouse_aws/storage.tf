@@ -39,37 +39,44 @@ resource "aws_s3_object" "website_error_html" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy
 resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
   bucket = aws_s3_bucket.website_bucket.bucket
-    policy = data.aws_iam_policy_document.allow_access_from_another_account.json
-#  policy = jsonencode({
-#    "Version" = "2012-10-17",
-#    "Statement" = {
-#      "Sid"    = "AllowCloudFrontServicePrincipalReadOnly",
-#      "Effect" = "Allow",
-#      "Principal" = {
-#        "Service" = "cloudfront.amazonaws.com"
-#      },
-#      "Action"   = "s3:GetObject",
-#      "Resource" = "arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*",
-#      "Condition" = {
-#        "StringEquals" = {
-#          # "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current_user.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
-#          "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn
-#        }
-#      }
-#    }
-#  })
+  policy = data.aws_iam_policy_document.allow_access_from_another_account.json
+  #  policy = jsonencode({
+  #    "Version" = "2012-10-17",
+  #    "Statement" = {
+  #      "Sid"    = "AllowCloudFrontServicePrincipalReadOnly",
+  #      "Effect" = "Allow",
+  #      "Principal" = {
+  #        "Service" = "cloudfront.amazonaws.com"
+  #      },
+  #      "Action"   = "s3:GetObject",
+  #      "Resource" = "arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*",
+  #      "Condition" = {
+  #        "StringEquals" = {
+  #          # "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current_user.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
+  #          "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn
+  #        }
+  #      }
+  #    }
+  #  })
 }
-# TESTING, condition may be faulty
+
+# TESTING, condition may be faulty:
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
 data "aws_iam_policy_document" "allow_access_from_another_account" {
   statement {
+    sid    = "AllowCloudFrontServicePrincipalReadOnly"
+    effect = "Allow"
+
     principals {
       type        = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
     }
 
     actions = ["s3:GetObject"]
-
-    resources = ["arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*"]
+    resources = [
+#      "arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*",
+      aws_s3_bucket.website_bucket.arn
+    ]
 
     condition {
       test     = "StringEquals"
