@@ -25,13 +25,15 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
 resource "aws_s3_object" "website_index_html" {
   bucket = aws_s3_bucket.website_bucket.bucket
   key    = local.index_file
+  content_type = "text/html"
   source = "${path.root}/${var.index_file_path}"
   etag   = filemd5("${path.root}/${var.index_file_path}")
 }
 
 resource "aws_s3_object" "website_error_html" {
   bucket = aws_s3_bucket.website_bucket.bucket
-  key    = local.index_file
+  key    = local.error_file
+  content_type = "text/html"
   source = "${path.root}/${var.error_file_path}"
   etag   = filemd5("${path.root}/${var.error_file_path}")
 }
@@ -40,27 +42,8 @@ resource "aws_s3_object" "website_error_html" {
 resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
   bucket = aws_s3_bucket.website_bucket.bucket
   policy = data.aws_iam_policy_document.allow_access_from_another_account.json
-  #  policy = jsonencode({
-  #    "Version" = "2012-10-17",
-  #    "Statement" = {
-  #      "Sid"    = "AllowCloudFrontServicePrincipalReadOnly",
-  #      "Effect" = "Allow",
-  #      "Principal" = {
-  #        "Service" = "cloudfront.amazonaws.com"
-  #      },
-  #      "Action"   = "s3:GetObject",
-  #      "Resource" = "arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*",
-  #      "Condition" = {
-  #        "StringEquals" = {
-  #          # "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current_user.account_id}:distribution/${aws_cloudfront_distribution.s3_distribution.id}"
-  #          "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn
-  #        }
-  #      }
-  #    }
-  #  })
 }
 
-# TESTING, condition may be faulty:
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
 data "aws_iam_policy_document" "allow_access_from_another_account" {
   statement {
@@ -72,16 +55,16 @@ data "aws_iam_policy_document" "allow_access_from_another_account" {
       identifiers = ["cloudfront.amazonaws.com"]
     }
 
-    actions = ["s3:GetObject"]
-    resources = [
-#      "arn:aws:s3:::${aws_s3_bucket.website_bucket.bucket}/*",
-      aws_s3_bucket.website_bucket.arn
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
     ]
+    resources = ["${aws_s3_bucket.website_bucket.arn}/*"]
 
     condition {
       test     = "StringEquals"
+      variable = "AWS:SourceArn"
       values   = [aws_cloudfront_distribution.s3_distribution.arn]
-      variable = aws_cloudfront_distribution.s3_distribution.arn
     }
   }
 }
