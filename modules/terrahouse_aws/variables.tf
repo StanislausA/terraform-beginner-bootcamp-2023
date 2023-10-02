@@ -18,20 +18,20 @@ variable "bucket_name" {
   }
 }
 
-variable "index_file" {
+variable "index_file_path" {
   type = string
 
   validation {
-    condition = fileexists(var.index_file)
+    condition = fileexists(var.index_file_path)
     error_message = "index file path does not exist."
   }
 }
 
-variable "error_file" {
+variable "error_file_path" {
   type = string
 
   validation {
-    condition = fileexists(var.error_file)
+    condition = fileexists(var.error_file_path)
     error_message = "error file path does not exist."
   }
 }

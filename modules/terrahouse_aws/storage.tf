@@ -1,0 +1,70 @@
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
+resource "aws_s3_bucket" "website_bucket" {
+  # Bucket Naming Rules => https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+  bucket = var.bucket_name
+
+  tags = {
+    UserUuid = var.user_uuid
+  }
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration
+resource "aws_s3_bucket_website_configuration" "website_configuration" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+
+  index_document {
+    suffix = local.index_file
+  }
+
+  error_document {
+    key = local.error_file
+  }
+}
+
+#https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object
+resource "aws_s3_object" "website_index_html" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+  key    = local.index_file
+  content_type = "text/html"
+  source = "${path.root}/${var.index_file_path}"
+  etag   = filemd5("${path.root}/${var.index_file_path}")
+}
+
+resource "aws_s3_object" "website_error_html" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+  key    = local.error_file
+  content_type = "text/html"
+  source = "${path.root}/${var.error_file_path}"
+  etag   = filemd5("${path.root}/${var.error_file_path}")
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy
+resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+  policy = data.aws_iam_policy_document.allow_access_from_another_account.json
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
+data "aws_iam_policy_document" "allow_access_from_another_account" {
+  statement {
+    sid    = "AllowCloudFrontServicePrincipalReadOnly"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+    resources = ["${aws_s3_bucket.website_bucket.arn}/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_distribution.arn]
+    }
+  }
+}
