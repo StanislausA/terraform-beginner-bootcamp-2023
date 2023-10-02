@@ -28,6 +28,11 @@ resource "aws_s3_object" "website_index_html" {
   content_type = "text/html"
   source = "${path.root}/${var.index_file_path}"
   etag   = filemd5("${path.root}/${var.index_file_path}")
+
+  lifecycle {
+    ignore_changes = [etag]
+    replace_triggered_by = [terraform_data.content_version.output]
+  }
 }
 
 resource "aws_s3_object" "website_error_html" {
@@ -36,6 +41,16 @@ resource "aws_s3_object" "website_error_html" {
   content_type = "text/html"
   source = "${path.root}/${var.error_file_path}"
   etag   = filemd5("${path.root}/${var.error_file_path}")
+
+  lifecycle {
+    ignore_changes = [etag]
+    replace_triggered_by = [terraform_data.content_version.output]
+  }
+}
+
+# https://developer.hashicorp.com/terraform/language/resources/terraform-data
+resource "terraform_data" "content_version" {
+  input = var.content_version
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy
