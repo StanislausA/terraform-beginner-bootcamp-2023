@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  retain_on_delete    = true
+#  retain_on_delete    = true
   comment             = "Static website hosting for: ${var.bucket_name}"
   default_root_object = local.index_file
 
