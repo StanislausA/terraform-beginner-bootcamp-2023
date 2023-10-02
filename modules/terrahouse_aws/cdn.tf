@@ -15,9 +15,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = local.s3_origin_id
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-#  retain_on_delete    = true
+  enabled         = true
+  is_ipv6_enabled = true
+  #  retain_on_delete    = true
   comment             = "Static website hosting for: ${var.bucket_name}"
   default_root_object = local.index_file
 
@@ -55,5 +55,17 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+  }
+}
+
+resource "terraform_data" "invalidate_cache" {
+  triggers_replace = terraform_data.content_version.output
+
+  provisioner "local-exec" {
+    command = <<EOC
+aws cloudfront create-invalidation \
+--distribution-id ${aws_cloudfront_distribution.s3_distribution.id} \
+--paths '/*'
+    EOC
   }
 }

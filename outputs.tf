@@ -10,5 +10,5 @@ output "s3_website_endpoint" {
 
 output "cloudfront_distribution_endpoint" {
   description = "CloudFront Distribution Endpoint"
-  value = module.terrahouse_aws.cloudfront_distribution_endpoint
+  value       = module.terrahouse_aws.cloudfront_distribution_endpoint
 }
