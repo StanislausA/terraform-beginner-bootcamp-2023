@@ -19,6 +19,7 @@ variable "bucket_name" {
 }
 
 variable "index_file_path" {
+  description = "File path to index.html"
   type = string
 
   validation {
@@ -28,10 +29,21 @@ variable "index_file_path" {
 }
 
 variable "error_file_path" {
+  description = "File path to error.html"
   type = string
 
   validation {
     condition = fileexists(var.error_file_path)
     error_message = "error file path does not exist."
+  }
+}
+
+variable "content_version" {
+  description = "Current content version number"
+  type = number
+
+  validation {
+    condition = var.content_version > 0
+    error_message = "The content version must be a positive integer."
   }
 }
