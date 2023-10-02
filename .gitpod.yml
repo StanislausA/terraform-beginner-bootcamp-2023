@@ -22,6 +22,7 @@ vscode:
   extensions:
     - amazonwebservices.aws-toolkit-vscode
     - hashicorp.terraform
+    - rebornix.ruby
 jetbrains:
   intellij:
     plugins:
