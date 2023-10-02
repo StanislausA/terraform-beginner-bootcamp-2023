@@ -7,8 +7,6 @@ tasks:
       AWS_CLI_AUTO_PROMPT: on-partial
     before: |
       source ./bin/install_aws_cli
-  - name: terraform-cloud-init
-    command: terraform init
   - name: sinatra
     before: |
       cd terratowns_mock_server
@@ -30,3 +28,4 @@ jetbrains:
       - aws.toolkit
       - org.intellij.plugins.hcl
       - com.jetbrains.sh
+      - org.jetbrains.plugins.ruby
