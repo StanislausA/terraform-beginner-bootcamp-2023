@@ -2,13 +2,13 @@
 
 ZIP_NAME='awscliv2.zip'
 
-cd /workspace
+cd /workspace || return
 
 curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o $ZIP_NAME
 unzip -u $ZIP_NAME
 sudo ./aws/install
 rm -f $ZIP_NAME
 
-cd "$THEIA_WORKSPACE_ROOT"
+cd "$THEIA_WORKSPACE_ROOT" || return
 
 aws sts get-caller-identity
