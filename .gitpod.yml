@@ -30,3 +30,4 @@ jetbrains:
       - org.intellij.plugins.hcl
       - com.jetbrains.sh
       - org.jetbrains.plugins.ruby
+      - org.jetbrains.plugins.go
