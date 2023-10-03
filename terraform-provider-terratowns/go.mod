@@ -1,6 +1,8 @@
-module github.com/StanislausA/terraform-provider-terratowns
+module github.com/ExamProCo/terraform-provider-terratowns
 
 go 1.21.1
+
+replace github.com/ExamProCo/terraform-provider-terratowns => /workspace/terraform-beginner-bootcamp-2023/terraform-provider-terratowns
 
 require (
 	github.com/google/uuid v1.3.0
