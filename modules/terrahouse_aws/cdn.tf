@@ -19,7 +19,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled = true
   #  retain_on_delete    = true
   comment             = "Static website hosting for: ${var.bucket_name}"
-  default_root_object = local.index_file
+  default_root_object = local.index_file_name
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
@@ -66,6 +66,6 @@ resource "terraform_data" "invalidate_cache" {
 aws cloudfront create-invalidation \
 --distribution-id ${aws_cloudfront_distribution.s3_distribution.id} \
 --paths '/*'
-    EOC
+EOC
   }
 }

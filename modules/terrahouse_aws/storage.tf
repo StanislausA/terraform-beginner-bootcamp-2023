@@ -13,21 +13,21 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
   bucket = aws_s3_bucket.website_bucket.bucket
 
   index_document {
-    suffix = local.index_file
+    suffix = local.index_file_name
   }
 
   error_document {
-    key = local.error_file
+    key = local.error_file_name
   }
 }
 
 #https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object
 resource "aws_s3_object" "website_index_html" {
   bucket = aws_s3_bucket.website_bucket.bucket
-  key    = local.index_file
+  key    = local.index_file_name
   content_type = "text/html"
-  source = "${path.root}/${var.index_file_path}"
-  etag   = filemd5("${path.root}/${var.index_file_path}")
+  source = local.index_file_path
+  etag   = filemd5(local.index_file_path)
 
   lifecycle {
     ignore_changes = [etag]
@@ -36,11 +36,12 @@ resource "aws_s3_object" "website_index_html" {
 }
 
 resource "aws_s3_object" "website_assets" {
-  for_each = fileset("${path.root}/public/assets","*.{jpg,png,gif}")
+  for_each = fileset("${var.main_directory}/assets","*.{jpg,png,gif}")
   bucket = aws_s3_bucket.website_bucket.bucket
   key    = "assets/${each.key}"
-  source = "${path.root}/public/assets/${each.key}"
-  etag = filemd5("${path.root}/public/assets/${each.key}")
+  source = "${var.main_directory}/assets/${each.key}"
+  etag = filemd5("${var.main_directory}/assets/${each.key}")
+
   lifecycle {
     replace_triggered_by = [terraform_data.content_version.output]
     ignore_changes = [etag]
@@ -49,10 +50,10 @@ resource "aws_s3_object" "website_assets" {
 
 resource "aws_s3_object" "website_error_html" {
   bucket = aws_s3_bucket.website_bucket.bucket
-  key    = local.error_file
+  key    = local.error_file_name
   content_type = "text/html"
-  source = "${path.root}/${var.error_file_path}"
-  etag   = filemd5("${path.root}/${var.error_file_path}")
+  source = "${local.error_file_path}"
+  etag   = filemd5("${local.error_file_path}")
 
   lifecycle {
     ignore_changes = [etag]

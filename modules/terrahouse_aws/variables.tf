@@ -18,24 +18,9 @@ variable "bucket_name" {
   }
 }
 
-variable "index_file_path" {
-  description = "File path to index.html"
+variable "main_directory" {
+  description = "Directory path containing web content files."
   type = string
-
-  validation {
-    condition = fileexists(var.index_file_path)
-    error_message = "index file path does not exist."
-  }
-}
-
-variable "error_file_path" {
-  description = "File path to error.html"
-  type = string
-
-  validation {
-    condition = fileexists(var.error_file_path)
-    error_message = "error file path does not exist."
-  }
 }
 
 variable "content_version" {
